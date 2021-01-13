@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Mettle\AdobeSign;
 
 use GuzzleHttp\Psr7\MultipartStream;
+use GuzzleHttp\Psr7\Response;
 use Mettle\AdobeSign\Exceptions\AdobeSignException;
 use Mettle\AdobeSign\Exceptions\AdobeSignInvalidAccessTokenException;
 use Mettle\AdobeSign\Exceptions\AdobeSignMissingRequiredParamException;
 use Mettle\AdobeSign\Exceptions\AdobeSignUnsupportedMediaTypeException;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Tool\QueryBuilderTrait;
+use UnexpectedValueException;
 
 /**
  * Class AdobeSign
@@ -85,8 +87,18 @@ class AdobeSign
         return $this;
     }
 
-    protected function parseResponse($res)
+    /**
+     * @param Response $response
+     * @return mixed
+     * @throws AdobeSignException
+     * @throws AdobeSignInvalidAccessTokenException
+     * @throws AdobeSignMissingRequiredParamException
+     * @throws AdobeSignUnsupportedMediaTypeException
+     */
+    protected function parseResponse(Response $response)
     {
+        $res = $this->parseJson((string) $response->getBody());
+
         if (isset($res['code'])) {
             if ($res['code'] == 'INVALID_ACCESS_TOKEN') {
                 throw new AdobeSignInvalidAccessTokenException($res['code'] . ': ' . $res['message']);
@@ -100,6 +112,20 @@ class AdobeSign
         }
 
         return $res;
+    }
+
+    protected function parseJson(string $content)
+    {
+        $content = json_decode($content, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new UnexpectedValueException(sprintf(
+                "Failed to parse JSON response: %s",
+                json_last_error_msg()
+            ));
+        }
+
+        return $content;
     }
 
     /*

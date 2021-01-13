@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Mettle\AdobeSign\Tests;
 
+use GuzzleHttp\Psr7\Response;
+
 class AdobeSignLibraryDocumentsTest extends BaseTestCase
 {
     protected function setUp(): void
@@ -11,7 +13,7 @@ class AdobeSignLibraryDocumentsTest extends BaseTestCase
         parent::setUp();
 
         $this->provider->shouldReceive('getAuthenticatedRequest')->andReturn($this->request);
-        $this->provider->shouldReceive('getResponse')->andReturn(['mock_response' => 'mock_response']);
+        $this->provider->shouldReceive('getResponse')->andReturn(new Response(200, [], json_encode(['mock_response' => 'mock_response'])));
     }
 
     public function testCreateLibraryDocument()
