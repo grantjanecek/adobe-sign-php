@@ -1,30 +1,35 @@
 {
-  "name": "kevinem/adobe-sign-php",
+  "name": "mettle/adobe-sign-php",
   "description": "Adobe Sign PHP Client",
   "require": {
-    "php": ">=5.6.0",
-    "kevinem/oauth2-adobe-sign": "^0.1.5"
+    "php": "^7.3 || ^8.0",
+    "ext-json": "*",
+    "mettle/oauth2-adobe-sign": "^0.2"
   },
   "require-dev": {
-    "phpunit/phpunit": "^5.4",
-    "mockery/mockery": "^0.9.5",
-    "mikey179/vfsStream": "^1.6"
+    "phpunit/phpunit": "^9.0",
+    "mockery/mockery": "^1.3",
+    "mikey179/vfsstream": "^1.6"
   },
   "license": "MIT",
   "authors": [
     {
       "name": "Kevin Em",
       "email": "kevinem@thinkdevise.com"
+    },
+    {
+      "name": "Maurizio Bonani",
+      "email": "maurizio@mettle.io"
     }
   ],
   "autoload": {
     "psr-4": {
-      "KevinEm\\AdobeSign\\": "src/"
+      "Mettle\\AdobeSign\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "KevinEm\\AdobeSign\\Tests\\": "tests/"
+      "Mettle\\AdobeSign\\Tests\\": "tests/"
     }
   }
 }

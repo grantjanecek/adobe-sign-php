@@ -1,16 +1,12 @@
 <?php
 
+declare(strict_types=1);
 
-namespace KevinEm\AdobeSign\Tests;
-
+namespace Mettle\AdobeSign\Tests;
 
 class AdobeSignWidgetsTest extends BaseTestCase
 {
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -21,66 +17,77 @@ class AdobeSignWidgetsTest extends BaseTestCase
     public function testCreateWidget()
     {
         $res = $this->adobeSign->createWidget([]);
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetWidgets()
     {
         $res = $this->adobeSign->getWidgets();
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetWidget()
     {
         $res = $this->adobeSign->getWidget('mock_widget_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetWidgetAuditTrail()
     {
         $res = $this->adobeSign->getWidgetAuditTrail('mock_widget_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetWidgetCombinedDocument()
     {
         $res = $this->adobeSign->getWidgetCombinedDocument('mock_widget_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetWidgetFormData()
     {
         $res = $this->adobeSign->getWidgetFormData('mock_widget_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetWidgetAgreements()
     {
         $res = $this->adobeSign->getWidgetAgreements('mock_widget_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetWidgetDocuments()
     {
         $res = $this->adobeSign->getWidgetDocuments('mock_widget_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetWidgetDocument()
     {
         $res = $this->adobeSign->getWidgetDocument('mock_widget_id', 'mock_document_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testPersonalizeWidget()
     {
         $res = $this->adobeSign->personalizeWidget('mock_widget_id', []);
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testUpdateWidgetStatus()
     {
         $res = $this->adobeSign->updateWidgetStatus('mock_widget_id', []);
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 }

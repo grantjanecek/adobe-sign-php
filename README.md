@@ -1,29 +1,40 @@
 # Adobe Sign PHP
 
+Unofficial PHP SDK for the [Adobe Sign REST API Version 5 Methods](https://secure.na1.adobesign.com/public/docs/restapi/v5)
+
 https://acrobat.adobe.com/us/en/sign.html
 
-[![Latest Stable Version](https://poser.pugx.org/kevinem/adobe-sign-php/v/stable?format=flat-square)](https://packagist.org/packages/kevinem/adobe-sign-php)
-[![License](https://poser.pugx.org/kevinem/adobe-sign-php/license?format=flat-square)](https://packagist.org/packages/kevinem/adobe-sign-php)
-[![Build Status](https://travis-ci.org/kevinem/adobe-sign-php.svg?branch=master)](https://travis-ci.org/kevinem/adobe-sign-php)
+[![Source Code](https://img.shields.io/badge/source-mettle/adobe--sign--php-blue.svg?style=flat-square)](https://github.com/mettle/adobe-sign-php)
+[![Latest Version](https://img.shields.io/github/release/mettle/adobe-sign-php.svg?style=flat-square)](https://github.com/mettle/adobe-sign-php/releases)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/mettle/adobe-sign-php/blob/master/LICENSE)
+[![Build Status](https://img.shields.io/github/workflow/status/mettle/adobe-sign-php/CI?label=CI&logo=github&style=flat-square)](https://github.com/mettle/adobe-sign-php/actions?query=workflow%3ACI)
+
+## Requirements
+
+The following versions of PHP are supported:
+
+* PHP 8.0
+* PHP 7.4
+* PHP 7.3
 
 ## Installation
 
 To install, use composer:
 
 ```
-composer require kevinem/adobe-sign-php
+composer require mettle/adobe-sign-php
 ```
 
 ## Documentation
 
-https://secure.na1.echosign.com/public/docs/restapi/v5
+https://secure.na1.adobesign.com/public/docs/restapi/v5
 
 ### Example Usage
 
 ```php
 session_start();
 
-$provider = new KevinEm\OAuth2\Client\AdobeSign([
+$provider = new Mettle\OAuth2\Client\AdobeSign([
     'clientId'          => 'your_client_id',
     'clientSecret'      => 'your_client_secret',
     'redirectUri'       => 'your_callback',
@@ -94,21 +105,7 @@ $multipart_stream   = new Psr7\MultipartStream([
 
 $transient_document = $adobeSign->uploadTransientDocument($multipart_stream);
 ```
+
 ## License
 
-The MIT License (MIT)
-Copyright (c) 2016 Kevin Em
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-documentation files (the "Software"), to deal in the Software without restriction, including without limitation
-the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
-and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of
-the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-IN THE SOFTWARE.
+The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.

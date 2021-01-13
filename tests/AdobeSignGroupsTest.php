@@ -1,16 +1,12 @@
 <?php
 
+declare(strict_types=1);
 
-namespace KevinEm\AdobeSign\Tests;
-
+namespace Mettle\AdobeSign\Tests;
 
 class AdobeSignGroupsTest extends BaseTestCase
 {
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -21,36 +17,42 @@ class AdobeSignGroupsTest extends BaseTestCase
     public function testCreateGroup()
     {
         $res = $this->adobeSign->createGroup([]);
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetGroups()
     {
         $res = $this->adobeSign->getGroups();
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetGroup()
     {
         $res = $this->adobeSign->getGroup('mock_group_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetGroupUsers()
     {
         $res = $this->adobeSign->getGroupUsers('mock_group_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testUpdateGroup()
     {
         $res = $this->adobeSign->updateGroup('mock_group_id', []);
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testDeleteGroup()
     {
         $res = $this->adobeSign->deleteGroup('mock_group_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 }

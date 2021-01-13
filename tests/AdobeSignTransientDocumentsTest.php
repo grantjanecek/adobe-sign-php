@@ -1,33 +1,31 @@
 <?php
 
+declare(strict_types=1);
 
-namespace KevinEm\AdobeSign\Tests;
+namespace Mettle\AdobeSign\Tests;
 
-
+use GuzzleHttp\Psr7\MultipartStream;
 use Mockery as m;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamFile;
+use Psr\Http\Message\RequestInterface;
 
 class AdobeSignTransientDocumentsTest extends BaseTestCase
 {
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-    }
-
     public function testUploadTransientDocument()
     {
-        $mutipartStream = m::mock('GuzzleHttp\Psr7\MultipartStream');
-        $request = m::mock('Psr\Http\Message\RequestInterface');
+        $mutipartStream = m::mock(MultipartStream::class);
+        $request = m::mock(RequestInterface::class);
+
         $mockFs = vfsStream::setup();
         $mockFile = new vfsStreamFile('filename.png');
         $mockFs->addChild($mockFile);
+
         $this->provider->shouldReceive('getAuthenticatedRequest')->andReturn($request);
         $this->provider->shouldReceive('getResponse')->andReturn(['id' => 'mock_id']);
-        $this->adobeSign->uploadTransientDocument($mutipartStream);
+
+        $res = $this->adobeSign->uploadTransientDocument($mutipartStream);
+
+        $this->assertEquals(['id' => 'mock_id'], $res);
     }
 }

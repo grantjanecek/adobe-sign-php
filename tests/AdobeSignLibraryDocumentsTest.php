@@ -1,16 +1,12 @@
 <?php
 
+declare(strict_types=1);
 
-namespace KevinEm\AdobeSign\Tests;
-
+namespace Mettle\AdobeSign\Tests;
 
 class AdobeSignLibraryDocumentsTest extends BaseTestCase
 {
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -21,48 +17,56 @@ class AdobeSignLibraryDocumentsTest extends BaseTestCase
     public function testCreateLibraryDocument()
     {
         $res = $this->adobeSign->createLibraryDocument([]);
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetLibraryDocuments()
     {
         $res = $this->adobeSign->getLibraryDocuments();
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetLibraryDocument()
     {
         $res = $this->adobeSign->getLibraryDocument('mock_library_document_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetLibraryDocumentAuditTrail()
     {
         $res = $this->adobeSign->getLibraryDocumentAuditTrail('mock_library_document_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetLibraryDocumentCombinedDocument()
     {
         $res = $this->adobeSign->getLibraryDocumentCombinedDocument('mock_library_document_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetLibraryDocumentDocuments()
     {
         $res = $this->adobeSign->getLibraryDocumentDocuments('mock_library_document_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetLibraryDocumentDocument()
     {
         $res = $this->adobeSign->getLibraryDocumentDocument('mock_library_document_id', 'mock_document_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testDeleteLibraryDocument()
     {
         $res = $this->adobeSign->deleteLibraryDocument('mock_library_document_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 }
