@@ -1,8 +1,6 @@
 <?php
 
-
-namespace KevinEm\AdobeSign\Exceptions;
-
+namespace Mettle\AdobeSign\Exceptions;
 
 class AdobeSignUnsupportedMediaTypeException extends AdobeSignException
 {

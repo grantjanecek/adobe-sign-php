@@ -1,16 +1,12 @@
 <?php
 
+declare(strict_types=1);
 
-namespace KevinEm\AdobeSign\Tests;
-
+namespace Mettle\AdobeSign\Tests;
 
 class AdobeSignMegaSignsTest extends BaseTestCase
 {
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -21,36 +17,42 @@ class AdobeSignMegaSignsTest extends BaseTestCase
     public function testSendMegaSignAgreement()
     {
         $res = $this->adobeSign->sendMegaSignAgreement([]);
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetMegaSigns()
     {
         $res = $this->adobeSign->getMegaSigns();
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetMegaSign()
     {
         $res = $this->adobeSign->getMegaSign('mock_mega_sign_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetMegaSignAgreements()
     {
         $res = $this->adobeSign->getMegaSignAgreements('mock_mega_sign_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetMegaSignFormData()
     {
         $res = $this->adobeSign->getMegaSignFormData('mock_mega_sign_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testUpdateMegaSignStatus()
     {
         $res = $this->adobeSign->updateMegaSignStatus('mock_mega_sign_id', []);
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 }

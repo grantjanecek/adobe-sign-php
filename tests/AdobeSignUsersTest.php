@@ -1,16 +1,12 @@
 <?php
 
+declare(strict_types=1);
 
-namespace KevinEm\AdobeSign\Tests;
-
+namespace Mettle\AdobeSign\Tests;
 
 class AdobeSignUsersTest extends BaseTestCase
 {
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -21,30 +17,35 @@ class AdobeSignUsersTest extends BaseTestCase
     public function testCreateUser()
     {
         $res = $this->adobeSign->createUser([]);
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetUsers()
     {
         $res = $this->adobeSign->getUsers();
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetUser()
     {
         $res = $this->adobeSign->getUser('mock_user_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testUpdateUser()
     {
         $res = $this->adobeSign->updateUser('mock_user_id', []);
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testUpdateUserStatus()
     {
         $res = $this->adobeSign->updateUserStatus('mock_user_id', []);
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 }

@@ -1,16 +1,12 @@
 <?php
 
+declare(strict_types=1);
 
-namespace KevinEm\AdobeSign\Tests;
-
+namespace Mettle\AdobeSign\Tests;
 
 class AdobeSignSearchTest extends BaseTestCase
 {
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -21,12 +17,14 @@ class AdobeSignSearchTest extends BaseTestCase
     public function testCreateSearchForAgreementAssetEvents()
     {
         $res = $this->adobeSign->createSearchForAgreementAssetEvents([]);
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 
     public function testGetSearchForAgreementAssetEvents()
     {
         $res = $this->adobeSign->getSearchForAgreementAssetEvents('mock_search_id');
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 }

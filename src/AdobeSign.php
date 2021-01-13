@@ -1,19 +1,20 @@
 <?php
 
+declare(strict_types=1);
 
-namespace KevinEm\AdobeSign;
+namespace Mettle\AdobeSign;
 
 use GuzzleHttp\Psr7\MultipartStream;
-use KevinEm\AdobeSign\Exceptions\AdobeSignException;
-use KevinEm\AdobeSign\Exceptions\AdobeSignInvalidAccessTokenException;
-use KevinEm\AdobeSign\Exceptions\AdobeSignMissingRequiredParamException;
-use KevinEm\AdobeSign\Exceptions\AdobeSignUnsupportedMediaTypeException;
+use Mettle\AdobeSign\Exceptions\AdobeSignException;
+use Mettle\AdobeSign\Exceptions\AdobeSignInvalidAccessTokenException;
+use Mettle\AdobeSign\Exceptions\AdobeSignMissingRequiredParamException;
+use Mettle\AdobeSign\Exceptions\AdobeSignUnsupportedMediaTypeException;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Tool\QueryBuilderTrait;
 
 /**
  * Class AdobeSign
- * @package KevinEm\AdobeSign
+ * @package Mettle\AdobeSign
  */
 class AdobeSign
 {
@@ -30,7 +31,7 @@ class AdobeSign
     protected $version = 'v5';
 
     /**
-     * @var \KevinEm\OAuth2\Client\AdobeSign
+     * @var \Mettle\OAuth2\Client\AdobeSign
      */
     protected $provider;
 
@@ -48,7 +49,7 @@ class AdobeSign
         $this->provider = $provider;
     }
 
-    public function getAuthorizationUrl()
+    public function getAuthorizationUrl(): string
     {
         return $this->provider->getAuthorizationUrl();
     }
@@ -70,15 +71,17 @@ class AdobeSign
         return $this->provider;
     }
 
-    public function setAccessToken($accessToken)
+    public function setAccessToken($accessToken): AdobeSign
     {
         $this->accessToken = $accessToken;
+
         return $this;
     }
 
-    public function setVersion($version)
+    public function setVersion($version): AdobeSign
     {
         $this->version = $version;
+
         return $this;
     }
 
@@ -116,9 +119,10 @@ class AdobeSign
         return $this->parseResponse($res);
     }
 
-    public function setBaseUri($baseUri)
+    public function setBaseUri($baseUri): AdobeSign
     {
         $this->baseUri = $baseUri;
+
         return $this;
     }
 
@@ -665,7 +669,9 @@ class AdobeSign
         $request = $this->provider->getAuthenticatedRequest(
             'GET',
             "$this->baseUri/$this->version/libraryDocuments/$libraryDocumentId/documents/$documentId",
-            $this->accessToken
+            $this->accessToken, [
+                'headers' => $headers
+            ]
         );
 
         $res = $this->provider->getResponse($request);

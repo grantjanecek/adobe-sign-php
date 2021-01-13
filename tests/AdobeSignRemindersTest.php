@@ -1,16 +1,12 @@
 <?php
 
+declare(strict_types=1);
 
-namespace KevinEm\AdobeSign\Tests;
-
+namespace Mettle\AdobeSign\Tests;
 
 class AdobeSignRemindersTest extends BaseTestCase
 {
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -21,6 +17,7 @@ class AdobeSignRemindersTest extends BaseTestCase
     public function testSendReminder()
     {
         $res = $this->adobeSign->sendReminder([]);
-        $this->assertEquals($res, ['mock_response' => 'mock_response']);
+
+        $this->assertEquals(['mock_response' => 'mock_response'], $res);
     }
 }
