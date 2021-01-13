@@ -797,7 +797,7 @@ class AdobeSign
     {
         $request = $this->provider->getAuthenticatedRequest(
             'GET',
-            "$this->baseUri/$this->version/widgets/$widgetId/formData",
+            "$this->baseUri/$this->version/widgets/$widgetId/agreements",
             $this->accessToken, [
                 'headers' => $headers
             ]
