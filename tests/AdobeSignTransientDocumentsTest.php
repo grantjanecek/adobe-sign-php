@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Mettle\AdobeSign\Tests;
 
 use GuzzleHttp\Psr7\MultipartStream;
+use GuzzleHttp\Psr7\Response;
 use Mockery as m;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamFile;
@@ -22,7 +23,7 @@ class AdobeSignTransientDocumentsTest extends BaseTestCase
         $mockFs->addChild($mockFile);
 
         $this->provider->shouldReceive('getAuthenticatedRequest')->andReturn($request);
-        $this->provider->shouldReceive('getResponse')->andReturn(['id' => 'mock_id']);
+        $this->provider->shouldReceive('getResponse')->andReturn(new Response(200, [], json_encode(['id' => 'mock_id'])));
 
         $res = $this->adobeSign->uploadTransientDocument($mutipartStream);
 

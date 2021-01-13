@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mettle\AdobeSign\Tests;
 
+use GuzzleHttp\Psr7\Response;
 use Mettle\AdobeSign\AdobeSign;
 use Mettle\AdobeSign\Exceptions\AdobeSignException;
 use Mettle\AdobeSign\Exceptions\AdobeSignInvalidAccessTokenException;
@@ -25,7 +26,9 @@ class AdobeSignTest extends BaseTestCase
             "mock_uri/v5/base_uris",
             'mock_access_token'
         )->andReturn($this->request);
-        $this->provider->shouldReceive('getResponse')->with($this->request);
+        $this->provider->shouldReceive('getResponse')
+            ->with($this->request)
+            ->andReturn(new Response(200, [], json_encode(['mock_response' => 'mock_response'])));
 
         $this->adobeSign->getBaseUris();
     }
@@ -38,7 +41,9 @@ class AdobeSignTest extends BaseTestCase
             "https://api.na1.echosign.com/api/rest/mock_version/base_uris",
             'mock_access_token'
         )->andReturn($this->request);
-        $this->provider->shouldReceive('getResponse')->with($this->request);
+        $this->provider->shouldReceive('getResponse')
+            ->with($this->request)
+            ->andReturn(new Response(200, [], json_encode(['mock_response' => 'mock_response'])));
 
         $this->adobeSign->getBaseUris();
     }
@@ -64,10 +69,14 @@ class AdobeSignTest extends BaseTestCase
         $this->expectException(AdobeSignInvalidAccessTokenException::class);
 
         $this->provider->shouldReceive('getAuthenticatedRequest')->andReturn($this->request);
-        $this->provider->shouldReceive('getResponse')->andReturn([
-            'code'    => 'INVALID_ACCESS_TOKEN',
-            'message' => 'mock_message'
-        ]);
+        $this->provider->shouldReceive('getResponse')
+            ->andReturn(
+                new Response(403, [], json_encode([
+                    'code'    => 'INVALID_ACCESS_TOKEN',
+                    'message' => 'mock_message'
+                ]))
+            );
+
         $this->adobeSign->getBaseUris();
     }
 
@@ -76,10 +85,14 @@ class AdobeSignTest extends BaseTestCase
         $this->expectException(AdobeSignUnsupportedMediaTypeException::class);
 
         $this->provider->shouldReceive('getAuthenticatedRequest')->andReturn($this->request);
-        $this->provider->shouldReceive('getResponse')->andReturn([
-            'code'    => 'UNSUPPORTED_MEDIA_TYPE',
-            'message' => 'mock_message'
-        ]);
+        $this->provider->shouldReceive('getResponse')
+            ->andReturn(
+                new Response(403, [], json_encode([
+                    'code'    => 'UNSUPPORTED_MEDIA_TYPE',
+                    'message' => 'mock_message'
+                ]))
+            );
+
         $this->adobeSign->getBaseUris();
     }
 
@@ -88,10 +101,14 @@ class AdobeSignTest extends BaseTestCase
         $this->expectException(AdobeSignMissingRequiredParamException::class);
 
         $this->provider->shouldReceive('getAuthenticatedRequest')->andReturn($this->request);
-        $this->provider->shouldReceive('getResponse')->andReturn([
-            'code'    => 'MISSING_REQUIRED_PARAM',
-            'message' => 'mock_message'
-        ]);
+        $this->provider->shouldReceive('getResponse')
+            ->andReturn(
+                new Response(403, [], json_encode([
+                    'code'    => 'MISSING_REQUIRED_PARAM',
+                    'message' => 'mock_message'
+                ]))
+            );
+
         $this->adobeSign->getBaseUris();
     }
 
@@ -100,17 +117,22 @@ class AdobeSignTest extends BaseTestCase
         $this->expectException(AdobeSignException::class);
 
         $this->provider->shouldReceive('getAuthenticatedRequest')->andReturn($this->request);
-        $this->provider->shouldReceive('getResponse')->andReturn([
-            'code'    => 'mock_code',
-            'message' => 'mock_message'
-        ]);
+        $this->provider->shouldReceive('getResponse')
+            ->andReturn(
+                new Response(403, [], json_encode([
+                    'code'    => 'mock_code',
+                    'message' => 'mock_message'
+                ]))
+            );
+
         $this->adobeSign->getBaseUris();
     }
 
     public function testGetBaseUris()
     {
         $this->provider->shouldReceive('getAuthenticatedRequest')->andReturn($this->request);
-        $this->provider->shouldReceive('getResponse')->andReturn(['base_uri' => 'response']);
+        $this->provider->shouldReceive('getResponse')
+            ->andReturn(new Response(200, [], json_encode(['base_uri' => 'response'])));
 
         $res = $this->adobeSign->getBaseUris();
         $this->assertEquals(['base_uri' => 'response'], $res);
