@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Mettle\AdobeSign;
 
 use GuzzleHttp\Psr7\MultipartStream;
-use GuzzleHttp\Psr7\Response;
-use Mettle\AdobeSign\Exceptions\AdobeSignException;
-use Mettle\AdobeSign\Exceptions\AdobeSignInvalidAccessTokenException;
-use Mettle\AdobeSign\Exceptions\AdobeSignMissingRequiredParamException;
-use Mettle\AdobeSign\Exceptions\AdobeSignUnsupportedMediaTypeException;
 use League\OAuth2\Client\Provider\AbstractProvider;
+use League\OAuth2\Client\Token\AccessTokenInterface;
 use League\OAuth2\Client\Tool\QueryBuilderTrait;
+use Psr\Http\Message\ResponseInterface;
 use UnexpectedValueException;
 
 /**
@@ -61,7 +58,7 @@ class AdobeSign
         return $this->provider->getAccessToken('authorization_code', compact('code'));
     }
 
-    public function refreshAccessToken($refreshToken)
+    public function refreshAccessToken($refreshToken): AccessTokenInterface
     {
         return $this->provider->getAccessToken('refresh_token', [
             'refresh_token' => $refreshToken
@@ -88,30 +85,18 @@ class AdobeSign
     }
 
     /**
-     * @param Response $response
-     * @return mixed
-     * @throws AdobeSignException
-     * @throws AdobeSignInvalidAccessTokenException
-     * @throws AdobeSignMissingRequiredParamException
-     * @throws AdobeSignUnsupportedMediaTypeException
+     * @param ResponseInterface $response
+     * @return array|string
      */
-    protected function parseResponse(Response $response)
+    protected function parseResponse(ResponseInterface $response)
     {
-        $res = $this->parseJson((string) $response->getBody());
-
-        if (isset($res['code'])) {
-            if ($res['code'] == 'INVALID_ACCESS_TOKEN') {
-                throw new AdobeSignInvalidAccessTokenException($res['code'] . ': ' . $res['message']);
-            } elseif ($res['code'] == 'UNSUPPORTED_MEDIA_TYPE') {
-                throw new AdobeSignUnsupportedMediaTypeException($res['code'] . ': ' . $res['message']);
-            } elseif ($res['code'] == 'MISSING_REQUIRED_PARAM') {
-                throw new AdobeSignMissingRequiredParamException($res['code'] . ': ' . $res['message']);
-            } else {
-                throw new AdobeSignException($res['code'] . ': ' . $res['message']);
-            }
+        if (strpos($response->getHeaderLine('Content-Type'), 'application/json') === 0) {
+            $response = $this->parseJson((string) $response->getBody());
+        } else {
+            $response = (string) $response->getBody();
         }
 
-        return $res;
+        return $response;
     }
 
     protected function parseJson(string $content)
