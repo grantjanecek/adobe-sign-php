@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Mettle\AdobeSign\Tests;
 
-use Mettle\OAuth2\Client\AdobeSign as OAuthAdobeSignProvider;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use Mettle\AdobeSign\AdobeSign;
-use Mockery as m;
+use Mettle\OAuth2\Client\AdobeSign as OAuthAdobeSignProvider;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 abstract class BaseTestCase extends TestCase
 {
@@ -18,14 +21,14 @@ abstract class BaseTestCase extends TestCase
     protected $adobeSign;
 
     /**
-     * @var m\MockInterface
+     * @var OAuthAdobeSignProvider
      */
     protected $provider;
 
     /**
-     * @var m\MockInterface
+     * @var array
      */
-    protected $request;
+    protected $history = [];
 
     /**
      * Sets up the fixture, for example, open a network connection.
@@ -33,8 +36,35 @@ abstract class BaseTestCase extends TestCase
      */
     protected function setUp(): void
     {
-        $this->request = m::mock(RequestInterface::class);
-        $this->provider = m::mock(OAuthAdobeSignProvider::class);
+        $this->provider = new OAuthAdobeSignProvider([
+            'clientId'          => 'your_client_id',
+            'clientSecret'      => 'your_client_secret',
+            'redirectUri'       => 'your_callback',
+            'scope'             => [
+                'scope1:type',
+                'scope2:type'
+            ]
+        ]);
+
         $this->adobeSign = new AdobeSign($this->provider);
+    }
+
+    protected function mockResponse(ResponseInterface $response)
+    {
+        $mock = new MockHandler([$response]);
+
+        $history = Middleware::history($this->history);
+
+        $handlerStack = HandlerStack::create($mock);
+        $handlerStack->push($history);
+
+        $this->provider->setHttpClient(
+            new Client(['handler' => $handlerStack])
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        $this->history = [];
     }
 }

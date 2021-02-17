@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Mettle\AdobeSign\Tests;
 
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Response;
 use Mettle\AdobeSign\AdobeSign;
-use Mettle\AdobeSign\Exceptions\AdobeSignException;
-use Mettle\AdobeSign\Exceptions\AdobeSignInvalidAccessTokenException;
-use Mettle\AdobeSign\Exceptions\AdobeSignMissingRequiredParamException;
-use Mettle\AdobeSign\Exceptions\AdobeSignUnsupportedMediaTypeException;
+use Prophecy\Argument\Token\TokenInterface;
+use Psr\Http\Message\RequestInterface;
+use UnexpectedValueException;
 
 class AdobeSignTest extends BaseTestCase
 {
@@ -20,134 +20,118 @@ class AdobeSignTest extends BaseTestCase
 
     public function testSetBaseUri()
     {
+        $this->mockResponse(
+            new Response(200, ['content-type' => 'application/json'], json_encode([
+                'api_access_point' => 'mock_access_point',
+                'web_access_point' => 'mock_web_access_point'
+            ]))
+        );
+
         $this->adobeSign->setAccessToken('mock_access_token')->setBaseUri('mock_uri');
-        $this->provider->shouldReceive('getAuthenticatedRequest')->with(
-            'GET',
-            "mock_uri/v5/base_uris",
-            'mock_access_token'
-        )->andReturn($this->request);
-        $this->provider->shouldReceive('getResponse')
-            ->with($this->request)
-            ->andReturn(new Response(200, [], json_encode(['mock_response' => 'mock_response'])));
 
         $this->adobeSign->getBaseUris();
+
+        $this->assertCount(1, $this->history);
+
+        /** @var RequestInterface $request */
+        $request = $this->history[0]['request'];
+
+        $this->assertEquals('GET', $request->getMethod());
+        $this->assertEquals('mock_uri/v5/base_uris', $request->getUri()->getPath());
+        $this->assertEquals('Bearer mock_access_token', $request->getHeaderLine('Authorization'));
     }
 
     public function testSetVersion()
     {
+        $this->mockResponse(
+            new Response(200, ['content-type' => 'application/json'], json_encode([
+                'api_access_point' => 'mock_access_point',
+                'web_access_point' => 'mock_web_access_point'
+            ]))
+        );
+
         $this->adobeSign->setAccessToken('mock_access_token')->setVersion('mock_version');
-        $this->provider->shouldReceive('getAuthenticatedRequest')->with(
-            'GET',
-            "https://api.na1.echosign.com/api/rest/mock_version/base_uris",
-            'mock_access_token'
-        )->andReturn($this->request);
-        $this->provider->shouldReceive('getResponse')
-            ->with($this->request)
-            ->andReturn(new Response(200, [], json_encode(['mock_response' => 'mock_response'])));
 
         $this->adobeSign->getBaseUris();
-    }
 
-    public function testGetAuthorizationUrl()
-    {
-        $this->provider->shouldReceive('getAuthorizationUrl')->andReturn('mock_authorization_url');
-        $url = $this->adobeSign->getAuthorizationUrl();
+        $this->assertCount(1, $this->history);
 
-        $this->assertEquals('mock_authorization_url', $url);
-    }
+        /** @var RequestInterface $request */
+        $request = $this->history[0]['request'];
 
-    public function testGetAccessToken()
-    {
-        $this->provider->shouldReceive('getAccessToken')->andReturn('mock_access_token');
-        $accessToken = $this->adobeSign->getAccessToken('mock_code');
-
-        $this->assertEquals('mock_access_token', $accessToken);
+        $this->assertEquals('GET', $request->getMethod());
+        $this->assertEquals('/api/rest/mock_version/base_uris', $request->getUri()->getPath());
+        $this->assertEquals('Bearer mock_access_token', $request->getHeaderLine('Authorization'));
     }
 
     public function testAdobeSignInvalidAccessTokenException()
     {
-        $this->expectException(AdobeSignInvalidAccessTokenException::class);
+        $this->expectException(ClientException::class);
 
-        $this->provider->shouldReceive('getAuthenticatedRequest')->andReturn($this->request);
-        $this->provider->shouldReceive('getResponse')
-            ->andReturn(
-                new Response(403, [], json_encode([
-                    'code'    => 'INVALID_ACCESS_TOKEN',
-                    'message' => 'mock_message'
-                ]))
-            );
+        $this->mockResponse(
+            new Response(401, ['content-type' => 'application/json'], json_encode([
+                'code' => 'INVALID_ACCESS_TOKEN',
+                'message' => 'Access token provided is invalid or has expired'
+            ]))
+        );
 
         $this->adobeSign->getBaseUris();
     }
 
-    public function testAdobeSignUnsupportedMediaTypeException()
+    public function testAdobeSignNoAccessTokenHeaderException()
     {
-        $this->expectException(AdobeSignUnsupportedMediaTypeException::class);
+        $this->expectException(ClientException::class);
 
-        $this->provider->shouldReceive('getAuthenticatedRequest')->andReturn($this->request);
-        $this->provider->shouldReceive('getResponse')
-            ->andReturn(
-                new Response(403, [], json_encode([
-                    'code'    => 'UNSUPPORTED_MEDIA_TYPE',
-                    'message' => 'mock_message'
-                ]))
-            );
+        $this->mockResponse(
+            new Response(401, ['content-type' => 'application/json'], json_encode([
+                'code' => 'NO_ACCESS_TOKEN_HEADER',
+                'message' => 'Access token header not provided'
+            ]))
+        );
 
         $this->adobeSign->getBaseUris();
     }
 
-    public function testAdobeSignMissingRequiredParamException()
+    public function testUnexpectedValueException()
     {
-        $this->expectException(AdobeSignMissingRequiredParamException::class);
+        $this->expectException(UnexpectedValueException::class);
 
-        $this->provider->shouldReceive('getAuthenticatedRequest')->andReturn($this->request);
-        $this->provider->shouldReceive('getResponse')
-            ->andReturn(
-                new Response(403, [], json_encode([
-                    'code'    => 'MISSING_REQUIRED_PARAM',
-                    'message' => 'mock_message'
-                ]))
-            );
-
-        $this->adobeSign->getBaseUris();
-    }
-
-    public function testAdobeSignException()
-    {
-        $this->expectException(AdobeSignException::class);
-
-        $this->provider->shouldReceive('getAuthenticatedRequest')->andReturn($this->request);
-        $this->provider->shouldReceive('getResponse')
-            ->andReturn(
-                new Response(403, [], json_encode([
-                    'code'    => 'mock_code',
-                    'message' => 'mock_message'
-                ]))
-            );
+        $this->mockResponse(
+            new Response(200, ['content-type' => 'application/json'], '{"code": "MALFORMED_JSON", "message":')
+        );
 
         $this->adobeSign->getBaseUris();
     }
 
     public function testGetBaseUris()
     {
-        $this->provider->shouldReceive('getAuthenticatedRequest')->andReturn($this->request);
-        $this->provider->shouldReceive('getResponse')
-            ->andReturn(new Response(200, [], json_encode(['base_uri' => 'response'])));
+        $this->mockResponse(
+            new Response(200, ['content-type' => 'application/json'], json_encode([
+                'api_access_point' => 'mock_access_point',
+                'web_access_point' => 'mock_web_access_point'
+            ]))
+        );
 
-        $res = $this->adobeSign->getBaseUris();
-        $this->assertEquals(['base_uri' => 'response'], $res);
+        $response = $this->adobeSign->getBaseUris();
+
+        $this->assertEquals([
+            'api_access_point' => 'mock_access_point',
+            'web_access_point' => 'mock_web_access_point'
+        ], $response);
     }
 
     public function testRefreshAccessToken()
     {
-        $accessToken = [
-            'access_token' => 'mock_access_token'
-        ];
+        $this->mockResponse(
+            new Response(200, ['content-type' => 'application/json'], json_encode([
+                'access_token' => 'mock_access_token',
+            ]))
+        );
 
-        $this->provider->shouldReceive('getAccessToken')->andReturn($accessToken);
+        /** @var TokenInterface $token */
         $token = $this->adobeSign->refreshAccessToken('mock_refresh_token');
 
-        $this->assertEquals($accessToken, $token);
+        $this->assertEquals('mock_access_token', $token->getToken());
     }
 
     public function testSetAccessToken()
