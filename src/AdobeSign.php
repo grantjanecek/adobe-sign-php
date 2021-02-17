@@ -191,8 +191,10 @@ class AdobeSign
             'POST',
             "$this->baseUri/$this->version/agreements/$agreementId/participantSets/$participantSetId/participants/$participantId/alternateParticipants",
             $this->accessToken, [
-                'headers' => $headers,
-                'body' => $alternateParticipantInfo
+                'headers' => array_merge([
+                    'Content-Type' => 'application/json'
+                ], $headers),
+                'body' => json_encode($alternateParticipantInfo)
             ]
         );
 
