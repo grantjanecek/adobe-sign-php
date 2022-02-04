@@ -2,7 +2,7 @@
   "name": "mettle/adobe-sign-php",
   "description": "Adobe Sign PHP Client",
   "require": {
-    "php": "^7.3 || ^8.0",
+    "php": "^7.3 || ^8.0 || ^8.1",
     "ext-json": "*",
     "mettle/oauth2-adobe-sign": "^0.2"
   },
