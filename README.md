@@ -13,6 +13,7 @@ https://acrobat.adobe.com/us/en/sign.html
 
 The following versions of PHP are supported:
 
+* PHP 8.1
 * PHP 8.0
 * PHP 7.4
 * PHP 7.3
